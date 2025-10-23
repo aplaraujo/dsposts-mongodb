@@ -28,6 +28,11 @@ public class PostService {
         return new PostDTO(entity);
     }
 
+    public List<PostDTO> findByTitle(String text) {
+        List<Post> list = postRepository.findByTitleContainingIgnoreCase(text);
+        return list.stream().map(x -> new PostDTO(x)).collect(Collectors.toList());
+    }
+
     // Método auxiliar para buscar no banco de dados o id
     @Transactional(readOnly = true)
     private Post getEntityById(String id) {
