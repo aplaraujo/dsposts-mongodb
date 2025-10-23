@@ -26,8 +26,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserDTO findById(String id) {
-        Optional<User> obj = userRepository.findById(id);
-        User entity = obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
+        User entity = getEntityById(id);
         return new UserDTO(entity);
     }
 
@@ -39,8 +38,23 @@ public class UserService {
         return new UserDTO(entity);
     }
 
+    @Transactional
+    public UserDTO update(String id, UserDTO dto) {
+        User entity = getEntityById(id); // Pegar o objeto do banco de dados
+        copyDtoToEntity(dto, entity); // Copiar os dados do objeto para o DTO
+        entity = userRepository.save(entity);
+        return new UserDTO(entity);
+    }
+
     private void copyDtoToEntity(UserDTO dto, User entity) {
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
+    }
+
+    // Método auxiliar para buscar no banco de dados o id
+    private User getEntityById(String id) {
+        Optional<User> obj = userRepository.findById(id);
+        User entity = obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
+        return entity;
     }
 }
