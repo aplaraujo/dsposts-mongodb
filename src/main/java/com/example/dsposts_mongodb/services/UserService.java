@@ -1,6 +1,8 @@
 package com.example.dsposts_mongodb.services;
 
+import com.example.dsposts_mongodb.models.dto.PostDTO;
 import com.example.dsposts_mongodb.models.dto.UserDTO;
+import com.example.dsposts_mongodb.models.entities.Post;
 import com.example.dsposts_mongodb.models.entities.User;
 import com.example.dsposts_mongodb.repositories.UserRepository;
 import com.example.dsposts_mongodb.services.exceptions.ObjectNotFoundException;
@@ -51,6 +53,11 @@ public class UserService {
     public void delete(String id) {
         getEntityById(id);
         userRepository.deleteById(id);
+    }
+
+    public List<PostDTO> getUserPosts(String id) {
+        User user = getEntityById(id);
+        return user.getPosts().stream().map(x -> new PostDTO(x)).collect(Collectors.toList()); // Acesso à lista de publicações
     }
 
     private void copyDtoToEntity(UserDTO dto, User entity) {

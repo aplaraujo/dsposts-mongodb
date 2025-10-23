@@ -1,5 +1,6 @@
 package com.example.dsposts_mongodb.controllers;
 
+import com.example.dsposts_mongodb.models.dto.PostDTO;
 import com.example.dsposts_mongodb.models.dto.UserDTO;
 import com.example.dsposts_mongodb.models.entities.User;
 import com.example.dsposts_mongodb.services.UserService;
@@ -46,5 +47,11 @@ public class UserController {
     public ResponseEntity<UserDTO> delete(@PathVariable String id) {
         userService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/{id}/posts")
+    public ResponseEntity<List<PostDTO>> getUserPosts(@PathVariable String id) {
+        List<PostDTO> obj = userService.getUserPosts(id);
+        return ResponseEntity.ok().body(obj);
     }
 }
