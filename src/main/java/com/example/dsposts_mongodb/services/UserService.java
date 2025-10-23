@@ -6,6 +6,7 @@ import com.example.dsposts_mongodb.repositories.UserRepository;
 import com.example.dsposts_mongodb.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -44,6 +45,12 @@ public class UserService {
         copyDtoToEntity(dto, entity); // Copiar os dados do objeto para o DTO
         entity = userRepository.save(entity);
         return new UserDTO(entity);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void delete(String id) {
+        getEntityById(id);
+        userRepository.deleteById(id);
     }
 
     private void copyDtoToEntity(UserDTO dto, User entity) {
