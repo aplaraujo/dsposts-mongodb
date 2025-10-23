@@ -1,7 +1,11 @@
 package com.example.dsposts_mongodb.models.entities;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Document(collection = "users") // Mapear a classe como uma coleção do MongoDB
 public class User {
@@ -10,6 +14,9 @@ public class User {
     private String name;
     private String email;
 
+    // Lista de publicações de um determinado usuário
+    @DBRef(lazy = true) // Lista que faz referência à entidade Posts
+    private List<Post> posts = new ArrayList<>();
     public User() {}
 
     public User(String id, String name, String email) {

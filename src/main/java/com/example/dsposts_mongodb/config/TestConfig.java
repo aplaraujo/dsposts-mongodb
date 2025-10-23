@@ -1,6 +1,7 @@
 package com.example.dsposts_mongodb.config;
 
 import com.example.dsposts_mongodb.models.entities.User;
+import com.example.dsposts_mongodb.repositories.PostRepository;
 import com.example.dsposts_mongodb.repositories.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,14 @@ public class TestConfig {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PostRepository postRepository;
+
     // Carga inicial do banco de dados
     @PostConstruct
     public void init() {
         userRepository.deleteAll();
+        postRepository.deleteAll();
 
         User maria = new User(null, "Maria Brown", "maria@gmail.com");
         User alex = new User(null, "Alex Grey", "alex@gmail.com");
