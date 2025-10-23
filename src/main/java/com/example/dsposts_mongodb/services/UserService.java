@@ -24,10 +24,23 @@ public class UserService {
         return list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public UserDTO findById(String id) {
         Optional<User> obj = userRepository.findById(id);
         User entity = obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
         return new UserDTO(entity);
+    }
+
+    @Transactional
+    public UserDTO insert(UserDTO dto) {
+        User entity = new User();
+        copyDtoToEntity(dto, entity);
+        entity = userRepository.insert(entity);
+        return new UserDTO(entity);
+    }
+
+    private void copyDtoToEntity(UserDTO dto, User entity) {
+        entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());
     }
 }
